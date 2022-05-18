@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Ratio Observer</title>
+</head>
+<body>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const query = location.href.split('?')[1];
+
+        let data;
+        axios.get(`/ratios?${query}`)
+            .then((response) => {
+                data = response.data;
+
+                const labels = Object.keys(data.ratios);
+                const chartData = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Ratios',
+                            backgroundColor: 'rgb(255, 99, 132)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            data: Object.values(data.ratios),
+                        },
+                        {
+                            label: 'Median',
+                            backgroundColor: 'rgb(84, 109, 229)',
+                            borderColor: 'rgb(84, 109, 229)',
+                            data: Object.values(data.medians),
+                        }
+                    ]
+                };
+                const config = {
+                    type: 'line',
+                    data: chartData,
+                    options: {}
+                };
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+            });
+
+        // const labels = [
+        //     'January',
+        //     'February',
+        //     'March',
+        //     'April',
+        //     'May',
+        //     'June',
+        // ];
+        //
+        // const data = {
+        //     labels: labels,
+        //     datasets: [{
+        //         label: 'My First dataset',
+        //         backgroundColor: 'rgb(255, 99, 132)',
+        //         borderColor: 'rgb(255, 99, 132)',
+        //         data: [0, 10, 5, 2, 20, 30, 45],
+        //     }]
+        // };
+        //
+        // const config = {
+        //     type: 'line',
+        //     data: data,
+        //     options: {}
+        // };
+        //
+        // const myChart = new Chart(
+        //     document.getElementById('myChart'),
+        //     config
+        // );
+    </script>
+</body>
+</html>
